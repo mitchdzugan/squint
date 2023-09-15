@@ -20,7 +20,7 @@
                                           expr-env infix-operator? prefix-unary? statement suffix-unary?]]
    [squint.internal.deftype :as deftype]
    [squint.internal.destructure :refer [core-let]]
-   [squint.internal.fn :refer [core-defmacro core-defn core-fn]]
+   [squint.internal.fn :refer [core-defmacro core-def- core-defn- core-defn core-fn]]
    [squint.internal.loop :as loop]
    [squint.defclass :as defclass]
    [squint.internal.macros :as macros]
@@ -79,7 +79,8 @@
                       'extend-type protocols/core-extend-type
                       'deftype deftype/core-deftype
                       'defn core-defn
-                      'defn- core-defn
+                      'defn- core-defn-
+                      'def- core-def-
                       'instance? macros/core-instance?
                       'time macros/core-time
                       'declare macros/core-declare

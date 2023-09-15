@@ -329,6 +329,12 @@
     (list 'def (with-meta name m)
           (with-meta (cons `fn fdecl) m))))
 
+(defn core-defn- [_&form _&env name & fdecl]
+  (apply core-defn _&form _&env (with-meta name {:private true}) fdecl))
+
+(defn core-def- [_&form _&env name & fdecl]
+  (concat (list 'def (with-meta name {:private true})) fdecl))
+
 (defn core-defmacro
   "Like defn, but the resulting function name is declared as a
   macro and will be used as a macro by the compiler when it is
