@@ -68,7 +68,7 @@
         (.then (fn [{:keys [javascript jsx] :as opts}]
                  (let [out-file (path/resolve output-dir
                                               (or out-file
-                                                  (str/replace in-file #".clj(s|c)$"
+                                                  (str/replace in-file #".clj(s|c|z)?$"
                                                                (if jsx
                                                                  ".jsx"
                                                                  (or (when-let [ext extension]
