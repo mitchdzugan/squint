@@ -305,11 +305,23 @@
   (let [env* env
         env (dissoc env :jsx)
         expr-env (assoc env :context :expr)
-        key-fn (fn [k] (if-let [ns (and (keyword? k) (namespace k))]
-                         (str ns "/" (name k))
-                         (name k)))
-        mk-pair (fn [pair] (str (emit (key-fn (key pair)) expr-env) ": "
-                                (emit (val pair) expr-env)))
+        key-fn (fn [k]
+                 (if (vector? k)
+                   k
+                   (if-let [ns (and (keyword? k) (namespace k))]
+                     (str ns "/" (name k))
+                     (name k))))
+        mk-pair (fn [pair]
+                  (let [k (key pair)
+                        v (val pair)
+                        get? (:get (meta v))]
+                    (str (if get? "get " "")
+                         (emit (key-fn k) expr-env)
+                         (if get? "(){ " ": ")
+                         (emit v (if get?
+                                   (assoc expr-env :context :return)
+                                   expr-env))
+                         (if get? "}" ""))))
         keys (str/join ", " (map mk-pair (seq expr)))]
     (escape-jsx (-> (format "({ %s })" keys)
                     (emit-return env))
@@ -353,7 +365,12 @@
     :readers {'js #(vary-meta % assoc ::js true)
               'jsx jsx}
     :read-cond :allow
-    :features #{:cljs}}))
+    :features #{:cljs}
+    :postprocess (fn [{:keys [obj loc]}]
+                   (if (or (symbol? obj)
+                           (coll? obj))
+                     (vary-meta obj #(merge % {:loc loc}))
+                     obj))}))
 
 (defn transpile-string*
   ([s] (transpile-string* s {}))
