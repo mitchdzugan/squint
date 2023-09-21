@@ -95,7 +95,7 @@
                                          bb)
                                  bv (if (contains? defaults local)
                                       (list 'cljs.core/get gmap bk (defaults local))
-                                      (list 'cljs.core/get gmap bk))]
+                                      (list 'aget gmap bk))] ;; TODO fix for above
                              (recur
                               (if (or (keyword? bb) (symbol? bb)) ;(ident? bb)
                                 (-> ret (conj local bv))
