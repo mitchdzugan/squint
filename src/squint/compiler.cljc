@@ -306,7 +306,7 @@
         env (dissoc env :jsx)
         expr-env (assoc env :context :expr)
         key-fn (fn [k]
-                 (if (vector? k)
+                 (if (or (number? k) (vector? k))
                    k
                    (if-let [ns (and (keyword? k) (namespace k))]
                      (str ns "/" (name k))
