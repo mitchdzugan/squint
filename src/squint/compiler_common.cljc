@@ -408,7 +408,7 @@
       alias)
     alias))
 
-(defn process-require-clause [env [libname & {:keys [refer as]}]]
+(defn process-require-clause [env [libname & {:keys [refer as exporting]}]]
   (when-not (or (= 'squint.core libname)
                 (= 'cherry.core libname))
     (let [libname (resolve-ns libname)
@@ -426,7 +426,11 @@
                   (swap! *imported-vars* update libname (fnil identity #{}))
                   (statement (format "import * as %s from '%s'" as libname)))
                 (when refer
-                  (statement (format "import { %s } from '%s'" (str/join ", " (map munge refer)) libname))))]
+                  (statement (format "import { %s } from '%s'" (str/join ", " (map munge refer)) libname)))
+                (when exporting
+                  (if (= exporting "*")
+                    (statement (format "export * from '%s'" libname))
+                    (println "EXPORTING SOMETHING ELSE: " exporting))))]
       (swap! (:imports env) str expr)
       nil)))
 
