@@ -81,7 +81,7 @@
        :clj munged)))
 
 (defmethod emit nil [_ env]
-  (emit-return "null" env))
+  (emit-return "undefined" env))
 
 #?(:clj (derive #?(:clj java.lang.Integer) ::number))
 #?(:clj (derive #?(:clj java.lang.Long) ::number))
