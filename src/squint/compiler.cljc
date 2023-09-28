@@ -394,7 +394,7 @@
               elide-imports]
        :or {core-alias "squint_core"}
        :as opts}]
-   (binding [cc/*core-package* "squint-cljs/core.js"
+   (binding [cc/*core-package* "@mitch.dz/squint-cljs/core.js"
              cc/*target* :squint
              *jsx* false]
      (let [opts (merge {:ns-state (atom {})} opts)

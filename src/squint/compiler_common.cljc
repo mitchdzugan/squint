@@ -172,7 +172,7 @@
 
 (def core-vars (atom #{}))
 
-(def ^:dynamic *core-package* "squint-cljs/core.js")
+(def ^:dynamic *core-package* "@mitch.dz/squint-cljs/core.js")
 
 (defn maybe-core-var [sym env]
   (let [res
@@ -403,7 +403,7 @@
   (case *target*
     :squint
     (case alias
-      (squint.string clojure.string) "squint-cljs/string.js"
+      (squint.string clojure.string) "@mitch.dz/squint-cljs/string.js"
       alias)
     :cherry
     (case alias

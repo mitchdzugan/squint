@@ -25,7 +25,7 @@
 
 (defn bump-core-vars []
   (let [core-vars (:out (shell {:out :string}
-                               "node --input-type=module -e 'import * as squint from \"squint-cljs/core.js\";console.log(JSON.stringify(Object.keys(squint)))'"))
+                               "node --input-type=module -e 'import * as squint from \"@mitch.dz/squint-cljs/core.js\";console.log(JSON.stringify(Object.keys(squint)))'"))
         parsed (apply sorted-set (map symbol (json/parse-string core-vars)))]
     (spit "resources/squint/core.edn" (with-out-str
                                         ((requiring-resolve 'clojure.pprint/pprint)

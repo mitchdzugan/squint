@@ -5,7 +5,7 @@
    ["path" :as path]
    ["process" :as process]
    ["readline" :as readline]
-   ["squint-cljs/core.js" :as squint]
+   ["@mitch.dz/squint-cljs/core.js" :as squint]
    ["url" :as url]
    ["vm" :as vm]
    [clojure.string :as str]
