@@ -22,7 +22,7 @@
                            has-rest (some #{'&} b)]
                        (loop [ret (let [ret (conj bvec gvec val)]
                                     (if has-rest
-                                      (conj ret gseq (list `seq gvec))
+                                      (conj ret gseq gvec)
                                       ret))
                               n 0
                               bs b
@@ -40,13 +40,13 @@
                                                  :cljs (new js/Error "Unsupported binding form, only :as can follow & parameter")))
                                        (recur (pb (if has-rest
                                                     (conj ret
-                                                          gfirst `(first ~gseq)
-                                                          gseq `(next ~gseq))
+                                                          gfirst `(aget ~gseq 0)
+                                                          gseq `(.slice ~gseq 1))
                                                     ret)
                                                   firstb
                                                   (if has-rest
                                                     gfirst
-                                                    (list `nth gvec n nil)))
+                                                    (list `aget gvec n)))
                                               (inc n)
                                               (next bs)
                                               seen-rest?))))

@@ -542,6 +542,33 @@
                       (interleave (repeat "[") (emit-args env idxs) (repeat "]")))
                env))
 
+(defn emit-adel [env var idxs]
+  (emit-return (apply str
+                      "(delete "
+                      (emit var (expr-env env))
+                      (interleave (repeat "[") (emit-args env idxs) (repeat "]"))
+                      ")")
+               env))
+
+(defn emit-aset [env var args]
+  (let [[val & rev-indxs] (reverse args)
+        idxs (reverse rev-indxs)]
+    (emit-return (str
+                  (emit var (expr-env env))
+                  (apply str
+                         (interleave (repeat "[") (emit-args env idxs) (repeat "]")))
+                  " = "
+                  (emit val (expr-env env)))
+                 env)))
+
+(defn emit-amod [env var args]
+  (let [[f & rev-indxs] (reverse args)
+        idxs (reverse rev-indxs)
+        emit-at (->> (interleave (repeat "[") (emit-args env idxs) (repeat "]"))
+                     (apply str (emit var (expr-env env))))]
+    (-> (str emit-at " = (" (emit f (expr-env env)) ")(" emit-at ")")
+        (emit-return env))))
+
 (defmethod emit-special '. [_type env [_period obj method & args]]
   (let [[method args] (if (seq? method)
                         [(first method) (rest method)]
@@ -554,6 +581,15 @@
 
 (defmethod emit-special 'aget [_type env [_aget var & idxs]]
   (emit-aget env var idxs))
+
+(defmethod emit-special 'adel [_type env [_aget var & idxs]]
+  (emit-adel env var idxs))
+
+(defmethod emit-special 'aset [_type env [_aset var & args]]
+  (emit-aset env var args))
+
+(defmethod emit-special 'amod [_type env [_aset var & args]]
+  (emit-amod env var args))
 
 ;; TODO: this should not be reachable in user space
 (defmethod emit-special 'return [_type env [_return expr]]
