@@ -33,7 +33,7 @@
       (emit-repl env)))
 
 (def special-forms (set ['var '. 'if 'funcall 'fn 'fn* 'quote 'set!
-                         'return 'delete 'new 'do 'aget 'adel 'aset 'amod 'while
+                         'return 'delete 'new 'do 'aref 'aget 'adel 'aset 'amod 'while
                          'inc! 'dec! 'dec 'inc 'defined? 'and 'or
                          '? 'try 'break 'throw 'not
                          'const 'let 'let* 'ns 'def 'loop*

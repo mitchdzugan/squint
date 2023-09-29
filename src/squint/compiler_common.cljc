@@ -536,6 +536,10 @@
                       (comma-list (emit-args env args)))
                  env)))
 
+(defn emit-aref [env init]
+  (emit-return (apply str "[" (emit init (expr-env env)) "]")
+               env))
+
 (defn emit-aget [env var idxs]
   (emit-return (apply str
                       (emit var (expr-env env))
@@ -579,16 +583,19 @@
           (emit-method env obj (symbol method-str) args))
         (emit-repl env))))
 
+(defmethod emit-special 'aref [_type env [_aref init]]
+  (emit-aref env init))
+
 (defmethod emit-special 'aget [_type env [_aget var & idxs]]
   (emit-aget env var idxs))
 
-(defmethod emit-special 'adel [_type env [_aget var & idxs]]
+(defmethod emit-special 'adel [_type env [_adel var & idxs]]
   (emit-adel env var idxs))
 
 (defmethod emit-special 'aset [_type env [_aset var & args]]
   (emit-aset env var args))
 
-(defmethod emit-special 'amod [_type env [_aset var & args]]
+(defmethod emit-special 'amod [_type env [_amod var & args]]
   (emit-amod env var args))
 
 ;; TODO: this should not be reachable in user space
