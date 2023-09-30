@@ -32,14 +32,13 @@
   (-> (emit-return (str (pr-str (subs (str expr) 1))) env)
       (emit-repl env)))
 
-(def special-forms (set ['var '. 'if 'funcall 'fn 'fn* 'quote 'set!
-                         'return 'delete 'new 'do 'aref 'aget 'adel 'aset 'amod 'while
-                         'inc! 'dec! 'dec 'inc 'defined? 'and 'or
-                         '? 'try 'break 'throw 'not
-                         'const 'let 'let* 'ns 'def 'loop*
-                         'recur 'js* 'case* 'deftype* 'letfn*
+(def special-forms (set ['var '. 'funcall 'quote 'loop* 'recur 'js* 'js/typeof
+                         'if 'return 'delete 'new 'do 'while 'and 'or 'not 'const
+                         'def 'deftype* 'letfn* 'let 'let* 'ns 'case* 'fn 'fn*
+                         'inc! 'dec! 'dec 'inc 'defined? 'try 'break 'throw '?
+                         'aget 'aset 'amod 'adel 'set! 'mod! 'del! 'aref 'a= 'a#=
                          ;; js
-                         'js/await 'js-await 'js/typeof
+                         'js/await 'js-await
                          ;; prefixed to avoid conflicts
                          'squint-compiler-jsx
                          'require 'squint.defclass/defclass* 'squint.defclass/super*]))

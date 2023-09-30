@@ -537,8 +537,18 @@
                  env)))
 
 (defn emit-aref [env init]
-  (emit-return (apply str "[" (emit init (expr-env env)) "]")
+  (emit-return (str "{r:" (emit init (expr-env env)) "}")
                env))
+
+(defn emit-a#= [env ref f]
+  (let [emit-expr #(emit % (expr-env env))
+        ref-emit (emit-expr ref)]
+    (emit-return (str "(" ref-emit ".r = (" (emit-expr f) ")(" ref-emit ".r)" ")")
+                 env)))
+
+(defn emit-a= [env ref v]
+  (let [emit-expr #(emit % (expr-env env))]
+    (emit-return (str "(" (emit-expr ref) ".r = " (emit-expr v) ")") env)))
 
 (defn emit-aget [env var idxs]
   (emit-return (apply str
@@ -583,8 +593,9 @@
           (emit-method env obj (symbol method-str) args))
         (emit-repl env))))
 
-(defmethod emit-special 'aref [_type env [_aref init]]
-  (emit-aref env init))
+(defmethod emit-special 'aref [_type env [_aref init  ]] (emit-aref env init  ))
+(defmethod emit-special 'a#=  [_type env [_a#=  init f]] (emit-a#=  env init f))
+(defmethod emit-special 'a=   [_type env [_a=   init v]] (emit-a=   env init v))
 
 (defmethod emit-special 'aget [_type env [_aget var & idxs]]
   (emit-aget env var idxs))
