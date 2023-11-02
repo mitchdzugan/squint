@@ -378,12 +378,12 @@
 (defmethod emit-special 'def [_type env [_const & more]]
   (let [name (first more)]
     ;; TODO: move *public-vars* to :ns-state atom
-    (when-not (:private (meta name))
+    (when-not (or (:indef? env) (:private (meta name)))
       (swap! *public-vars* conj (munge* name)))
     (swap! (:ns-state env) (fn [state]
                              (let [current (:current state)]
                                (assoc-in state [current name] {}))))
-    (emit-var more env)))
+    (emit-var more (assoc env :indef? true))))
 
 (defn js-await [env more]
   (-> (emit-return (wrap-await (emit more (expr-env env))) env)

@@ -247,11 +247,14 @@
                      (prefix-unary? head) (emit-prefix-unary head expr)
                      (suffix-unary? head) (emit-suffix-unary head expr)
                      :else (cc/emit-special 'funcall env expr))))
+
                (keyword? (first expr))
-               (let [[k obj & args] expr]
-                 (emit (list* 'get obj k args) env))
+               (let [[k obj] expr]
+                 (cc/emit-special 'aget env (list 'aget obj k)))
+
                (list? expr)
                (cc/emit-special 'funcall env expr)
+
                :else
                (throw (new Exception (str "invalid form: " expr))))))
      env)))
